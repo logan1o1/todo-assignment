@@ -5,12 +5,14 @@ import path from 'path';
 import connectDB from "./backend/db/db.js";
 import userRouter from "./backend/routes/auth.route.js";
 import taskRouter from "./backend/routes/tasks.route.js";
+import cookieParser from "cookie-parser";
 
 
 dotenv.config()
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 const corsOptions = {
     origin: ["*"],

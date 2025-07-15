@@ -1,15 +1,35 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../context/AuthContext';
 
 export default function Login() {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const navigate = useNavigate();
+  const { login } = useAuthContext();
 
-  const handleChange = (e) =>
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = (e) => setFormData(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    // → call your login API here
-    console.log('login', form);
+    try {
+      const result = await fetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      const data = await result.json()
+
+      if (data.success == false) {
+        console.log("Err while getting data during login");
+        return;
+      }
+      login(data._id)
+      navigate('/')
+    } catch (error) {
+      console.log("Error: ", error.message);
+    }
   };
 
   return (
@@ -20,14 +40,13 @@ export default function Login() {
       >
         <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
         <label className="block mb-2">
-          <span className="text-sm">Email</span>
+          <span className="text-sm">Username</span>
           <input
-            name="email"
-            type="email"
+            name="username"
+            type="username"
             onChange={handleChange}
-            value={form.email}
+            value={formData.username}
             className="mt-1 block w-full p-2 border rounded"
-            placeholder="you@example.com"
           />
         </label>
         <label className="block mb-4">
@@ -36,9 +55,8 @@ export default function Login() {
             name="password"
             type="password"
             onChange={handleChange}
-            value={form.password}
+            value={formData.password}
             className="mt-1 block w-full p-2 border rounded"
-            placeholder="••••••••"
           />
         </label>
         <button

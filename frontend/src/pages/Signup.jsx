@@ -1,15 +1,32 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
-  const [form, setForm] = useState({ email: '', password: '', confirm: '' });
+  const [formData, setFormData] = useState({ username: '', email: '', password: ''});
+  const navigate = useNavigate()
 
-  const handleChange = (e) =>
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = (e) =>  setFormData(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    // → call your signup API here
-    console.log('signup', form);
+    try {
+      const result = await fetch("/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await result.json();
+
+      if (data.success == false) {
+        console.log("Error getting data while signup")
+        return;
+      }
+      navigate('/login')
+    } catch (error) {
+      console.log("Error: ", error.message)
+    }
   };
 
   return (
@@ -20,12 +37,22 @@ export default function Signup() {
       >
         <h2 className="text-2xl font-semibold mb-4 text-center">Sign Up</h2>
         <label className="block mb-2">
+          <span className="text-sm">Username</span>
+          <input
+            name="username"
+            type="username"
+            onChange={handleChange}
+            value={formData.username}
+            className="mt-1 block w-full p-2 border rounded"
+          />
+        </label>
+        <label className="block mb-2">
           <span className="text-sm">Email</span>
           <input
             name="email"
             type="email"
             onChange={handleChange}
-            value={form.email}
+            value={formData.email}
             className="mt-1 block w-full p-2 border rounded"
           />
         </label>
@@ -35,17 +62,7 @@ export default function Signup() {
             name="password"
             type="password"
             onChange={handleChange}
-            value={form.password}
-            className="mt-1 block w-full p-2 border rounded"
-          />
-        </label>
-        <label className="block mb-4">
-          <span className="text-sm">Confirm Password</span>
-          <input
-            name="confirm"
-            type="password"
-            onChange={handleChange}
-            value={form.confirm}
+            value={formData.password}
             className="mt-1 block w-full p-2 border rounded"
           />
         </label>
@@ -53,7 +70,7 @@ export default function Signup() {
           type="submit"
           className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700"
         >
-          Create Account
+          Signup
         </button>
       </form>
     </div>

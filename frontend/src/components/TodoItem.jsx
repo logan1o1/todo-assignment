@@ -16,7 +16,7 @@ export default function TodoItem({ task, onToggle, onDelete }) {
         onClick={onDelete}
         className="text-red-600 hover:text-red-800 font-bold"
       >
-        ×
+        X
       </button>
     </div>
   );
