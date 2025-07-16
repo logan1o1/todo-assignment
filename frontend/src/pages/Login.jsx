@@ -25,6 +25,7 @@ export default function Login() {
         console.log("Err while getting data during login");
         return;
       }
+      localStorage.setItem('auth_user', data._id)
       login(data._id)
       navigate('/')
     } catch (error) {
