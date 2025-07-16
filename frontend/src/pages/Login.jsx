@@ -27,7 +27,7 @@ export default function Login() {
       }
       localStorage.setItem('auth_user', data._id)
       login(data._id)
-      navigate('/')
+      navigate('/todos', { replace: true })
     } catch (error) {
       console.log("Error: ", error.message);
     }
@@ -66,7 +66,8 @@ export default function Login() {
         >
           Sign In
         </button>
-        <Link to={'/signup'}>signup</Link>
+        <p>If you don't have an account:</p><br />
+        <Link className='text-blue-600 underline' to={'/signup'}>Signup</Link>
       </form>
     </div>
   );
