@@ -26,8 +26,7 @@ export default function Login() {
         return;
       }
       localStorage.setItem('auth_user', data._id)
-      login(data._id)
-      navigate('/todos', { replace: true })
+      navigate('/todos')
     } catch (error) {
       console.log("Error: ", error.message);
     }

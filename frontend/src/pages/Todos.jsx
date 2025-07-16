@@ -48,7 +48,7 @@ export default function Todos() {
 
 	useEffect(() => {
 		getTodos()
-	}, [])
+	}, [tasks])
 
 	async function completeTodo(id) {
 		try {
