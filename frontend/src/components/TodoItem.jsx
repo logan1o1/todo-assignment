@@ -1,4 +1,5 @@
 export default function TodoItem({ task, onToggle, onDelete }) {
+  
   return (
     <div className="flex items-center justify-between p-2 border rounded">
       <label className="flex items-center space-x-2">

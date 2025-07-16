@@ -1,23 +1,32 @@
-/** @format */
-
-import { useState } from "react"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-// import "./App.css"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
 import Todos from "./pages/Todos"
 
 function App() {
-	const [count, setCount] = useState(0)
+	const authUser = localStorage.getItem("auth_user")
 
 	return (
 		<>
 			<BrowserRouter>
 				<Routes>
-          <Route path="/signup" element={<Signup />}/>
-          <Route path="/login" element={<Login />}/>
-          <Route path="/" element={<Todos />}/>
-        </Routes>
+					<Route
+						path='/'
+						element={<Navigate to={authUser ? "/todos" : "/login"} />}
+					/>
+					<Route
+						path='/signup'
+						element={<Signup />}
+					/>
+					<Route
+						path='/login'
+						element={<Login />}
+					/>
+					<Route
+						path='/todos'
+						element={<Todos />}
+					/>
+				</Routes>
 			</BrowserRouter>
 		</>
 	)

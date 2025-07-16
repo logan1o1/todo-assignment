@@ -8,6 +8,8 @@ import taskRouter from "./backend/routes/tasks.route.js";
 import cookieParser from "cookie-parser";
 
 
+const __dirname = path.resolve()
+
 dotenv.config()
 
 const app = express();
@@ -25,10 +27,19 @@ const PORT = process.env.PORT || 4000
 app.use("/api/auth", userRouter);
 app.use("/api/tasks", taskRouter);
 
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+app.get(/^(?!\/api\/).*/, (req, resp) => {
+    resp.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+})
+
 const server = app.listen(PORT, () => {
     connectDB()
     console.log("app running on:", PORT)
-})
+});
+
+server.on("error", (err) => {
+    console.error("Server error:", err);
+});
 
 
 app.use((err, req, resp, next) => {

@@ -7,7 +7,7 @@ import { verifyToken } from "../middlewares/auth.js"
 const taskRouter = express.Router()
 
 taskRouter.get("/get", verifyToken, async (req, res) => {
-	const tasks = await Task.find().sort({ createdAt: -1 })
+	const tasks = await Task.find().sort({ completed: 1, createdAt: -1 })
 	res.status(200).json(tasks)
 })
 
